@@ -8,7 +8,7 @@
 | Thành viên 2 — Đinh Hoài Nam | 2A202603762 | §3: UX khi AI sai, nội dung hội thoại và nguyên tắc HAX/PAIR |
 | Thành viên 3 — Phạm Minh Đức | 2A202603758 | §4–5: mức tự chủ, prototype và ảnh minh họa |
 
-> Thay họ tên, mã học viên và phần việc bằng thông tin thật trước khi nộp. Kịch bản đơn hàng ECOM-4821 bên dưới là dữ liệu giả do nhóm tự dựng, không phải dữ liệu Shopee hay dữ liệu người thật.
+> Kịch bản đơn hàng ECOM-4821 bên dưới là dữ liệu giả do nhóm tự dựng, không phải dữ liệu Shopee hay dữ liệu người thật.
 
 ## §1. Lát cắt & phạm vi
 
@@ -86,7 +86,7 @@ Ca suýt chọn: **#8 nghi hàng giả**. Hại tiềm tàng cao, nhưng đề b
 
 **Tool khó xếp nhất — soan_hoan_tien:** nhóm chọn **cần người duyệt**. Tự động khi shop xác nhận gửi nhầm nghe có vẻ nhanh hơn, nhưng ca #3 cho thấy vẫn cần kiểm tra đúng đơn và đủ bằng chứng trước khi kết luận; cấm hoàn toàn thì loại bỏ cả ca bằng chứng đã rõ, người mua đáng được xử lý mà không nhận được gì. Vì chờ duyệt tạo khoảng trống thông tin, prototype cần thể hiện trạng thái hồ sơ và đường chuyển cấp — không để người mua mù tịt trong lúc chờ.
 
-**Ghi nhận thảo luận thật trước khi nộp:** [Tên TV1] chọn [mức] vì [lý do] · [Tên TV2] chọn [mức] vì [lý do] · Phạm Minh Đức chọn "cần người duyệt" cho soan_hoan_tien vì một lần hoàn tiền sai khó đảo hơn một lần chờ thêm vài giờ. Nhóm chốt [mức] vì [lý do, liên hệ ca #2/#3], và loại [mức còn lại] vì [lý do]. Không giữ các lựa chọn dự thảo này nếu nhóm đã thảo luận và thống nhất khác.
+**Ghi nhận thảo luận thật — cần hai thành viên bổ sung trước khi nộp:** Bùi Ngọc Hùng chọn [ghi lựa chọn thật] vì [ghi lý do thật] · Đinh Hoài Nam chọn [ghi lựa chọn thật] vì [ghi lý do thật] · Phạm Minh Đức chọn "cần người duyệt" cho soan_hoan_tien vì một lần hoàn tiền sai khó đảo hơn một lần chờ thêm vài giờ. Nhóm chốt [ghi mức đã thống nhất] vì [ghi lý do thật, liên hệ ca #2/#3], và loại [ghi mức còn lại] vì [ghi lý do thật].
 
 **Thử chính sách trên 3 ca:**
 
@@ -104,8 +104,8 @@ Ca suýt chọn: **#8 nghi hàng giả**. Hại tiềm tàng cao, nhưng đề b
 - **Công cụ:** HTML/CSS/JavaScript thuần; không có lời gọi AI thật hay kết nối hệ thống ngoài.
 - **Màn hình dành cho ai:** đây là giao diện **người xử lý hồ sơ** (nhân viên/trưởng nhóm), không phải màn hình người mua. Người mua thấy phản hồi AI ở bong bóng “Bản xem trước người mua · G10” trong cột trò chuyện bên trái, và thấy trạng thái cập nhật qua kênh hội thoại — họ không tương tác với nút ở panel phải.
 - **Ảnh minh họa:** prototype/01-can-cu-va-trang-thai.png và prototype/02-chuyen-nguoi-xu-ly.png.
-- **Ảnh 01:** hồ sơ khiếu nại với snapshot mô tả lúc đặt so với mô tả hiện tại đã sửa, trạng thái “Chưa đủ căn cứ để kết luận”, thanh căn cứ và dấu còn thiếu. Panel phải hiện nút hoạt động (“Duyệt & yêu cầu ảnh nhãn”, “Chuyển trưởng nhóm”) và hai nút bị khóa rõ ràng (“🔒 Hoàn tiền”, “🔒 Từ chối khiếu nại”) thể hiện mức “cần duyệt”. Thể hiện G11 (nêu rõ căn cứ đang xem) và G10 (chưa kết luận tự động).
-- **Ảnh 02:** sau khi người xử lý bấm “Chuyển trưởng nhóm”, timeline ghi nhận lý do và mốc giờ (13/11/2026 · 09:4x); nút “🔒 Hoàn tiền” và “🔒 Từ chối” vẫn hiển thị khóa; nút “↩ Gán lại / hoàn tác chuyển” xuất hiện để thể hiện chuyen_truong_nhom có thể đảo. Thể hiện G8/PAIR graceful failure, mức “tự làm” (tự chuyển khi mâu thuẫn) và khả năng hoàn tác/gán lại.
+- **Ảnh 01:** hồ sơ khiếu nại với snapshot mô tả lúc đặt so với mô tả hiện tại đã sửa, trạng thái “Chưa đủ căn cứ để kết luận”, thanh căn cứ và dấu còn thiếu. Panel phải hiện yêu cầu shop bổ sung bằng chứng, yêu cầu chuyển trưởng nhóm (G8), nút mô phỏng xác nhận mô tả đã sửa rồi tự chuyển, cùng hai nút quyết định tài chính bị khóa (“🔒 Hoàn tiền”, “🔒 Từ chối khiếu nại”). Thể hiện G11 (nêu rõ căn cứ đang xem), G10 (chưa kết luận tự động) và chỉ rõ đây là giao diện người xử lý.
+- **Ảnh 02:** sau khi mô phỏng hệ thống đối chiếu và phát hiện snapshot lúc đặt khác mô tả mới, hệ thống tự chuyển hồ sơ cho trưởng nhóm; timeline ghi nhận lý do và mốc giờ (13/11/2026 · 09:4x). Nút “🔒 Hoàn tiền” và “🔒 Từ chối” vẫn bị khóa; “↩ Gán lại / hoàn tác chuyển” cho phép nhân viên sửa việc phân tuyến. Thể hiện chuyen_truong_nhom mức “tự làm”, cùng khả năng phục hồi nếu chuyển nhầm. Nút mô phỏng làm rõ đây là prototype, không kết nối bộ máy phát hiện thật.
 - **Quyết định thiết kế:** dùng bố cục hai cột buyer/seller kèm timeline thay vì chỉ hiện luồng chat, vì người xử lý cần đặt căn cứ hai bên cạnh nhau mà không để lời bên nào lấn át bên kia. Nút hoàn tiền/từ chối hiện diện nhưng bị khóa (disabled) để người xem thấy rõ chúng tồn tại nhưng chưa thể bấm — không ẩn hoàn toàn, không tạo thao tác tiền thật.
 
 ## §6. Tốt là gì
@@ -122,6 +122,6 @@ Ca suýt chọn: **#8 nghi hàng giả**. Hại tiềm tàng cao, nhưng đề b
 
 1. **30 giây:** giới thiệu lát cắt và quy tắc “chưa đủ căn cứ thì chưa quyết tiền”.
 2. Mở ECOM-4821: người mua nói nồi ghi 6L nhưng lòng nồi 5L; chỉ ra snapshot lúc đặt và thông tin hiện có. Bấm yêu cầu thêm căn cứ để thấy trạng thái được ghi vào timeline.
-3. Bấm chuyển nhân viên; chỉ ra người duyệt thấy gì và tại sao nút hoàn/từ chối chưa khả dụng.
+3. Mô phỏng hệ thống xác nhận mô tả đã đổi sau khi đặt; chỉ ra hồ sơ tự chuyển trưởng nhóm, người duyệt thấy căn cứ gì, vì sao nút hoàn/từ chối vẫn khóa và cách gán lại nếu chuyển nhầm.
 4. **Ca lạ:** người mua đòi khóa shop vì nghi hàng giả. Trả lời: đây không phải kết luận trong khiếu nại thường; chuyển bộ phận chuyên trách, không hứa phạt shop.
 5. Mỗi thành viên trình bày một phần và trả lời: hành động sai thì ai mất gì, rủi ro lớn nhất là gì, mình đã làm phần nào.

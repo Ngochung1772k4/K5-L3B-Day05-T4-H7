@@ -103,6 +103,7 @@
     .btn.primary { color:white; border-color:var(--green); background:var(--green); text-align:center; }
     .btn.primary:hover { background:#056849; }
     .btn.soft { text-align:center; color:#506057; }
+    .btn.simulate { text-align:center; color:#6f4b08; background:#fff8e8; border-color:#f0dfb2; }
     .btn:disabled { opacity:.55; cursor:default; transform:none; }
     .note { margin-top:8px; color:#98a29c; font-size:10px; line-height:1.5; }
     .policy-lock { display:flex; align-items:center; gap:9px; padding:11px 12px; margin-top:12px; border:1px dashed #d8dfda; border-radius:9px; color:#7b8780; font-size:10px; }
@@ -211,7 +212,9 @@
             </div>
             <div class="divider-label">Bước tiếp theo · người xử lý hồ sơ</div>
             <button class="btn primary" id="requestBtn">Duyệt & yêu cầu ảnh nhãn từ shop</button>
-            <button class="btn soft" id="escalateBtn">G8 · Chuyển trưởng nhóm xem xét</button>
+            <button class="btn soft" id="escalateBtn">Yêu cầu chuyển trưởng nhóm (G8)</button>
+            <button class="btn simulate" id="simulateConflictBtn">Mô phỏng xác nhận mô tả đã sửa → tự chuyển</button>
+            <p class="note">Khi hệ thống xác nhận snapshot lúc đặt khác mô tả mới, chuyen_truong_nhom tự chuyển hồ sơ. Người xử lý có thể gán lại nếu chuyển nhầm.</p>
             <div id="reassignArea" style="display:none">
               <button class="btn soft" id="reassignBtn" style="color:#506057;margin-top:4px">↩ Gán lại / hoàn tác chuyển</button>
               <p class="note">Có thể gán lại cho nhân viên khác; hồ sơ không bị xóa.</p>
@@ -267,24 +270,38 @@
     document.getElementById('escalateBtn').addEventListener('click', () => {
       const button = document.getElementById('escalateBtn');
       button.disabled = true;
-      button.textContent = 'Đã chuyển trưởng nhóm ✓';
+      button.textContent = 'Đã yêu cầu chuyển trưởng nhóm ✓';
       document.getElementById('statusTag').textContent = 'Đã chuyển trưởng nhóm · Chờ xem xét';
       document.getElementById('eventMessage').style.display = 'block';
       document.getElementById('eventMessageText').textContent = 'Hồ sơ được chuyển kèm snapshot mô tả, phần chưa rõ và phản hồi của hai bên. Nút hoàn tiền/từ chối vẫn bị khóa cho đến khi trưởng nhóm duyệt.';
-      appendEvent('↗', 'Đã chuyển hồ sơ cho trưởng nhóm', 'Lý do: loại dung tích chưa được xác minh · nút hoàn tiền/từ chối vẫn khóa');
+      appendEvent('↗', 'Đã yêu cầu chuyển hồ sơ cho trưởng nhóm', 'Người xử lý chọn chuyển sớm · quyết định tiền vẫn chờ duyệt');
       document.getElementById('reassignArea').style.display = 'block';
       showToast('Trưởng nhóm nhận được hồ sơ và căn cứ hai phía. Chưa bên nào bị xử thua.');
+    });
+    document.getElementById('simulateConflictBtn').addEventListener('click', () => {
+      const button = document.getElementById('simulateConflictBtn');
+      button.disabled = true;
+      button.textContent = 'Đã phát hiện khác biệt · tự chuyển ✓';
+      document.getElementById('statusTag').textContent = 'Tự chuyển trưởng nhóm · Chờ xem xét';
+      document.getElementById('eventMessage').style.display = 'block';
+      document.getElementById('eventMessageText').textContent = 'Hệ thống xác nhận mô tả lúc đặt khác mô tả sau cập nhật và tự chuyển hồ sơ cho trưởng nhóm. Quyết định hoàn tiền/từ chối vẫn cần người có thẩm quyền.';
+      appendEvent('↗', 'Tự chuyển hồ sơ cho trưởng nhóm', 'Hệ thống phát hiện snapshot khác mô tả hiện tại · quyết định tiền vẫn chờ duyệt');
+      document.getElementById('escalateBtn').disabled = true;
+      document.getElementById('reassignArea').style.display = 'block';
+      showToast('Đã tự chuyển ca có mâu thuẫn chứng cứ. Người xử lý vẫn có thể gán lại.');
     });
     document.getElementById('reassignBtn').addEventListener('click', () => {
       document.getElementById('statusTag').textContent = 'Chờ gán lại · Hồ sơ vẫn mở';
       document.getElementById('escalateBtn').disabled = false;
-      document.getElementById('escalateBtn').textContent = 'G8 · Chuyển trưởng nhóm xem xét';
+      document.getElementById('escalateBtn').textContent = 'Yêu cầu chuyển trưởng nhóm (G8)';
+      document.getElementById('simulateConflictBtn').disabled = false;
+      document.getElementById('simulateConflictBtn').textContent = 'Mô phỏng xác nhận mô tả đã sửa → tự chuyển';
       document.getElementById('reassignArea').style.display = 'none';
       appendEvent('↩', 'Đã hoàn tác chuyển · hồ sơ chờ gán lại', 'Có thể chuyển lại cho nhân viên khác');
       showToast('Đã hoàn tác. Hồ sơ vẫn mở, chưa có quyết định tài chính.');
     });
-    if (new URLSearchParams(location.search).get('state') === 'escalated') {
-      document.getElementById('escalateBtn').click();
+    if (new URLSearchParams(location.search).get('state') === 'auto-escalated') {
+      document.getElementById('simulateConflictBtn').click();
       toast.classList.remove('show');
       clearTimeout(toastTimer);
     }

@@ -9,7 +9,7 @@ Hồ sơ ECOM-4821 là fixture do nhóm tự dựng: bản mô tả lúc mua ch�
 - **Yêu cầu shop xác nhận loại dung tích:** ghi trạng thái và một mục vào timeline, không tự hoàn tiền.
 - **Chuyển nhân viên xem xét:** đổi trạng thái, ghi lý do chuyển và giữ quyết định hoàn/từ chối ở chế độ chờ duyệt.
 
-Ảnh 01 và 02 minh họa trạng thái trước/sau khi chuyển người. Chúng được chụp từ prototype trong trình duyệt.
+Ảnh 01 và 02 minh họa trạng thái trước/sau khi mô phỏng hệ thống phát hiện snapshot khác mô tả mới và tự chuyển hồ sơ. Nút mô phỏng chỉ dùng cho prototype; sản phẩm thật cần bộ máy đối chiếu dữ liệu lịch sử.
 
 - 01 — 01-can-cu-va-trang-thai.png: snapshot lúc đặt và mô tả đã sửa được đặt cạnh nhau.
-- 02 — 02-chuyen-nguoi-xu-ly.png: hồ sơ đã chuyển nhân viên, chưa quyết định hoàn/từ chối.
+- 02 — 02-chuyen-nguoi-xu-ly.png: sau sự kiện mô phỏng, hồ sơ tự chuyển trưởng nhóm; quyết định hoàn/từ chối vẫn khóa và có thể gán lại.
