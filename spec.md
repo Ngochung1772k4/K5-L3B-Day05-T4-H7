@@ -84,9 +84,9 @@ Ca suýt chọn: **#8 nghi hàng giả**. Hại tiềm tàng cao, nhưng đề b
 | tu_choi_khieu_nai | **Cần người duyệt** | Nhân viên thấy căn cứ từ đơn và bằng chứng hai bên; người mua nhận lý do cụ thể và cách yêu cầu xem lại. Nếu chưa duyệt, hồ sơ không tự đóng; nhóm đề xuất chuyển trưởng nhóm khi quá hạn phản hồi. | Đóng khiếu nại khiến người mua mất quyền lợi. Chờ duyệt làm khiếu nại treo, vì vậy cần báo trạng thái và đường khiếu nại lại; tự làm bị loại. Cấm hoàn toàn bị loại vì sàn vẫn cần kết thúc ca đủ căn cứ. |
 | phat_shop | **Cấm** trong luồng khiếu nại này | AI không hiển thị nút phạt; nếu nghi hàng giả/vi phạm, chỉ chuyển bộ phận chuyên trách theo quy trình riêng, không tự xử phạt. | Phạt/khóa ảnh hưởng cả shop và khó đảo; chờ xác minh chuyên trách có thể kéo dài việc xử lý nhưng vẫn ít hại hơn phạt nhầm. Một khiếu nại/lời đe dọa không đủ thẩm quyền. |
 
-**Tool khó xếp nhất — soan_hoan_tien:** quyết định dự thảo là **cần người duyệt**. Tự động khi shop xác nhận có thể nhanh hơn nhưng ca #3 vẫn cần kiểm tra đúng đơn và bằng chứng; cấm hoàn toàn lại khiến người mua không được xử lý cả khi bằng chứng rõ. Chờ duyệt làm người mua chưa nhận được kết quả, nên prototype thể hiện trạng thái và đường chuyển cấp thay vì im lặng.
+**Tool khó xếp nhất — soan_hoan_tien:** nhóm chọn **cần người duyệt**. Tự động khi shop xác nhận gửi nhầm nghe có vẻ nhanh hơn, nhưng ca #3 cho thấy vẫn cần kiểm tra đúng đơn và đủ bằng chứng trước khi kết luận; cấm hoàn toàn thì loại bỏ cả ca bằng chứng đã rõ, người mua đáng được xử lý mà không nhận được gì. Vì chờ duyệt tạo khoảng trống thông tin, prototype cần thể hiện trạng thái hồ sơ và đường chuyển cấp — không để người mua mù tịt trong lúc chờ.
 
-**Ghi nhận thảo luận thật trước khi nộp:** [Tên TV1] chọn [mức] vì [lý do] · [Tên TV2] chọn [mức] vì [lý do] · [Tên TV3] chọn [mức] vì [lý do]. Nhóm chốt [mức] vì [lý do, liên hệ ca #2/#3], và loại [mức còn lại] vì [lý do]. Không giữ các lựa chọn dự thảo này nếu nhóm đã thảo luận và thống nhất khác.
+**Ghi nhận thảo luận thật trước khi nộp:** [Tên TV1] chọn [mức] vì [lý do] · [Tên TV2] chọn [mức] vì [lý do] · Phạm Minh Đức chọn "cần người duyệt" cho soan_hoan_tien vì một lần hoàn tiền sai khó đảo hơn một lần chờ thêm vài giờ. Nhóm chốt [mức] vì [lý do, liên hệ ca #2/#3], và loại [mức còn lại] vì [lý do]. Không giữ các lựa chọn dự thảo này nếu nhóm đã thảo luận và thống nhất khác.
 
 **Thử chính sách trên 3 ca:**
 
@@ -100,12 +100,12 @@ Ca suýt chọn: **#8 nghi hàng giả**. Hại tiềm tàng cao, nhưng đề b
 
 ## §5. Prototype
 
-- **File:** prototype/index.html — mở trực tiếp bằng trình duyệt; không backend, mọi thông tin là fixture giả.
-- **Công cụ:** HTML/CSS/JavaScript thuần; không có lời gọi AI thật.
-- **Ảnh:** prototype/01-can-cu-va-trang-thai.png và prototype/02-chuyen-nguoi-xu-ly.png.
-- **Ảnh 01:** hồ sơ khiếu nại, snapshot mô tả lúc đặt, lời khai hai bên và tình trạng thiếu căn cứ. Thể hiện G11, G10 và mức “cần duyệt”.
-- **Ảnh 02:** sau khi chọn “Chuyển nhân viên”, timeline ghi nhận lý do chuyển; quyết định hoàn/từ chối vẫn bị khóa chờ người có thẩm quyền. Thể hiện G8/PAIR graceful failure và quyền kiểm soát của con người.
-- **Quyết định thiết kế:** chọn màn hình hồ sơ hai cột buyer/seller cùng timeline thay vì chỉ chat, vì người xem cần so sánh căn cứ mà không bị lời bên nào lấn át. Chọn nút “Yêu cầu thêm căn cứ” và “Chuyển nhân viên”; không đặt nút phạt hoặc hoàn tiền ngay trên màn hình trợ lý.
+- **File:** prototype/index.html — mở trực tiếp bằng trình duyệt; không có backend, toàn bộ dữ liệu là fixture giả do nhóm tự dựng.
+- **Công cụ:** HTML/CSS/JavaScript thuần; không có lời gọi AI thật hay kết nối hệ thống ngoài.
+- **Ảnh minh họa:** prototype/01-can-cu-va-trang-thai.png và prototype/02-chuyen-nguoi-xu-ly.png.
+- **Ảnh 01:** hồ sơ khiếu nại với snapshot mô tả lúc đặt, lời khai hai bên và trạng thái “chưa đủ căn cứ”. Thể hiện nguyên tắc G11 (nêu rõ căn cứ đang xem), G10 (thu hẹp phạm vi khi chưa chắc) và mức “cần người duyệt” cho các hành động tài chính.
+- **Ảnh 02:** sau khi người mua chọn “Chuyển nhân viên”, timeline ghi nhận lý do và mốc chuyển; nút hoàn tiền và từ chối vẫn bị khóa cho đến khi người có thẩm quyền duyệt. Thể hiện G8/PAIR graceful failure và nguyên tắc con người kiểm soát quyết định không đảo ngược.
+- **Quyết định thiết kế:** dùng bố cục hai cột buyer/seller kèm timeline thay vì chỉ hiện luồng chat, vì người xem cần đặt căn cứ hai bên cạnh nhau mà không để lời bên nào lấn át bên kia. Chỉ đặt nút “Yêu cầu thêm căn cứ” và “Chuyển nhân viên” trên giao diện trợ lý; không có nút phạt shop hay hoàn tiền tức thì — đây là lựa chọn chủ ý để phản ánh đúng mức tự chủ đã chốt ở §4.
 
 ## §6. Tốt là gì
 
