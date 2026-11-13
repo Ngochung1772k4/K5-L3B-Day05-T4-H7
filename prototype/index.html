@@ -187,8 +187,8 @@
             <div class="cardhead"><div class="cardtitle">Dòng thời gian xử lý</div><div class="cardhint">Hai bên cùng được lắng nghe</div></div>
             <div class="timeline" id="timeline">
               <div class="event"><span class="event-icon">✓</span><div class="event-copy"><b>Đã nhận khiếu nại</b> từ người mua<time>13/11/2026 · 09:42</time></div></div>
-              <div class="event"><span class="event-icon muted">•</span><div class="event-copy"><b>Đã tải snapshot mô tả lúc đặt</b><time>Không dùng mô tả hiện tại thay cho lịch sử đơn</time></div></div>
-              <div class="event"><span class="event-icon muted">?</span><div class="event-copy"><b>Còn thiếu</b> ảnh nhãn hoặc xác nhận loại dung tích<time>Chưa có quyết định hoàn tiền/từ chối</time></div></div>
+              <div class="event"><span class="event-icon muted">•</span><div class="event-copy"><b>Đã tải snapshot mô tả lúc đặt</b><time>13/11/2026 · 09:43 · Không dùng mô tả hiện tại thay cho lịch sử đơn</time></div></div>
+              <div class="event"><span class="event-icon muted">?</span><div class="event-copy"><b>Còn thiếu</b> ảnh nhãn hoặc xác nhận loại dung tích<time>13/11/2026 · 09:43 · Chưa có quyết định hoàn tiền/từ chối</time></div></div>
             </div>
           </section>
         </div>
@@ -209,11 +209,18 @@
               <div class="autonomy-row"><span class="level review">Cần duyệt</span><span>Hoàn tiền / từ chối: nhân viên xem đủ căn cứ hai bên.</span></div>
               <div class="autonomy-row"><span class="level banned">Cấm</span><span>Phạt hoặc khóa shop trong luồng khiếu nại thường.</span></div>
             </div>
-            <div class="divider-label">Bước tiếp theo</div>
+            <div class="divider-label">Bước tiếp theo · người xử lý hồ sơ</div>
             <button class="btn primary" id="requestBtn">Duyệt & yêu cầu ảnh nhãn từ shop</button>
-            <button class="btn soft" id="escalateBtn">G8 · Chuyển nhân viên xem xét</button>
-            <p class="note">Dự kiến phản hồi 24 giờ là mốc giả lập của prototype. Người mua có thể chuyển nhân viên ngay, không phải chờ.</p>
-            <div class="policy-lock"><span class="lock">▣</span><div><b>Hoàn tiền / từ chối / phạt shop</b>Chỉ người có thẩm quyền mới quyết định</div></div>
+            <button class="btn soft" id="escalateBtn">G8 · Chuyển trưởng nhóm xem xét</button>
+            <div id="reassignArea" style="display:none">
+              <button class="btn soft" id="reassignBtn" style="color:#506057;margin-top:4px">↩ Gán lại / hoàn tác chuyển</button>
+              <p class="note">Có thể gán lại cho nhân viên khác; hồ sơ không bị xóa.</p>
+            </div>
+            <p class="note">Dự kiến phản hồi 24 giờ là mốc giả lập. Người mua thấy trạng thái qua bản xem trước trong cuộc trò chuyện — họ không bấm nút ở màn hình này.</p>
+            <div class="divider-label">Quyết định tài chính · cần duyệt</div>
+            <button class="btn" disabled id="refundBtn" title="Chờ nhân viên có thẩm quyền duyệt hồ sơ">🔒 Hoàn tiền cho người mua</button>
+            <button class="btn" disabled id="rejectBtn" title="Chờ nhân viên có thẩm quyền duyệt hồ sơ">🔒 Từ chối khiếu nại</button>
+            <p class="note">Hai nút trên bị khóa cho đến khi nhân viên duyệt đủ căn cứ hai bên. AI chỉ soạn đề xuất, không tự quyết định tiền.</p>
           </section>
           <section class="card right-card">
             <div class="cardtitle">Quy tắc công bằng</div>
@@ -231,6 +238,7 @@
   <script>
     const toast = document.getElementById('toast');
     let toastTimer;
+    let eventMinute = 43;
     function showToast(message) {
       toast.textContent = message;
       toast.classList.add('show');
@@ -238,10 +246,12 @@
       toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
     }
     function appendEvent(icon, title, detail) {
+      eventMinute++;
       const timeline = document.getElementById('timeline');
       const row = document.createElement('div');
       row.className = 'event';
-      row.innerHTML = '<span class="event-icon">' + icon + '</span><div class="event-copy"><b>' + title + '</b><time>' + detail + '</time></div>';
+      const timeStr = '13/11/2026 · 09:' + String(eventMinute).padStart(2, '0');
+      row.innerHTML = '<span class="event-icon">' + icon + '</span><div class="event-copy"><b>' + title + '</b><time>' + timeStr + ' · ' + detail + '</time></div>';
       timeline.appendChild(row);
     }
     document.getElementById('requestBtn').addEventListener('click', () => {
@@ -257,12 +267,21 @@
     document.getElementById('escalateBtn').addEventListener('click', () => {
       const button = document.getElementById('escalateBtn');
       button.disabled = true;
-      button.textContent = 'Đã chuyển nhân viên ✓';
-      document.getElementById('statusTag').textContent = 'Đã chuyển nhân viên · Chờ xem xét';
+      button.textContent = 'Đã chuyển trưởng nhóm ✓';
+      document.getElementById('statusTag').textContent = 'Đã chuyển trưởng nhóm · Chờ xem xét';
       document.getElementById('eventMessage').style.display = 'block';
-      document.getElementById('eventMessageText').textContent = 'Hồ sơ được chuyển kèm snapshot mô tả, phần chưa rõ và phản hồi của hai bên.';
-      appendEvent('↗', 'Đã chuyển hồ sơ cho nhân viên', 'Lý do: loại dung tích chưa được xác minh');
-      showToast('Nhân viên nhận được hồ sơ và căn cứ hai phía. Chưa bên nào bị xử thua.');
+      document.getElementById('eventMessageText').textContent = 'Hồ sơ được chuyển kèm snapshot mô tả, phần chưa rõ và phản hồi của hai bên. Nút hoàn tiền/từ chối vẫn bị khóa cho đến khi trưởng nhóm duyệt.';
+      appendEvent('↗', 'Đã chuyển hồ sơ cho trưởng nhóm', 'Lý do: loại dung tích chưa được xác minh · nút hoàn tiền/từ chối vẫn khóa');
+      document.getElementById('reassignArea').style.display = 'block';
+      showToast('Trưởng nhóm nhận được hồ sơ và căn cứ hai phía. Chưa bên nào bị xử thua.');
+    });
+    document.getElementById('reassignBtn').addEventListener('click', () => {
+      document.getElementById('statusTag').textContent = 'Chờ gán lại · Hồ sơ vẫn mở';
+      document.getElementById('escalateBtn').disabled = false;
+      document.getElementById('escalateBtn').textContent = 'G8 · Chuyển trưởng nhóm xem xét';
+      document.getElementById('reassignArea').style.display = 'none';
+      appendEvent('↩', 'Đã hoàn tác chuyển · hồ sơ chờ gán lại', 'Có thể chuyển lại cho nhân viên khác');
+      showToast('Đã hoàn tác. Hồ sơ vẫn mở, chưa có quyết định tài chính.');
     });
     if (new URLSearchParams(location.search).get('state') === 'escalated') {
       document.getElementById('escalateBtn').click();
