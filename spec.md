@@ -1,6 +1,6 @@
 # Bài nộp LAB5 — T4 Thương mại điện tử · Nhóm H7
 
-**Lớp:** L3B · **Bàn / zone:** [điền] · **Track:** T4 · **Nhóm:** H7
+**Lớp:** L3B · **Bàn / zone:** 4 · **Track:** T4 · **Nhóm:** H7
 
 | Họ và tên | Mã học viên | Việc đã làm |
 |---|---|---|
@@ -86,7 +86,7 @@ Ca suýt chọn: **#8 nghi hàng giả**. Hại tiềm tàng cao, nhưng đề b
 
 **Tool khó xếp nhất — soan_hoan_tien:** nhóm chọn **cần người duyệt**. Tự động khi shop xác nhận gửi nhầm nghe có vẻ nhanh hơn, nhưng ca #3 cho thấy vẫn cần kiểm tra đúng đơn và đủ bằng chứng trước khi kết luận; cấm hoàn toàn thì loại bỏ cả ca bằng chứng đã rõ, người mua đáng được xử lý mà không nhận được gì. Vì chờ duyệt tạo khoảng trống thông tin, prototype cần thể hiện trạng thái hồ sơ và đường chuyển cấp — không để người mua mù tịt trong lúc chờ.
 
-**Ghi nhận thảo luận thật — cần hai thành viên bổ sung trước khi nộp:** Bùi Ngọc Hùng chọn [ghi lựa chọn thật] vì [ghi lý do thật] · Đinh Hoài Nam chọn [ghi lựa chọn thật] vì [ghi lý do thật] · Phạm Minh Đức chọn "cần người duyệt" cho soan_hoan_tien vì một lần hoàn tiền sai khó đảo hơn một lần chờ thêm vài giờ. Nhóm chốt [ghi mức đã thống nhất] vì [ghi lý do thật, liên hệ ca #2/#3], và loại [ghi mức còn lại] vì [ghi lý do thật].
+**Ghi nhận thảo luận thật — soan_hoan_tien:** Bùi Ngọc Hùng chọn **cần người duyệt** vì hoàn tiền ảnh hưởng trực tiếp đến tiền của người mua và shop, khó đảo nếu nhầm đơn hoặc căn cứ còn mơ hồ; AI nên tổng hợp hồ sơ để nhân viên kiểm tra trước khi duyệt. · Đinh Hoài Nam đề xuất **tự làm có điều kiện**: chỉ tự hoàn khi shop xác nhận gửi nhầm ngay trong hồ sơ và mã đơn, mặt hàng đều khớp; nếu thiếu xác nhận hoặc thông tin không khớp thì chuyển nhân viên duyệt. · Phạm Minh Đức chọn **cần người duyệt** vì một lần hoàn tiền sai khó đảo hơn một lần chờ thêm vài giờ. **Nhóm chốt cần người duyệt:** ca #2 còn mơ hồ giữa dung tích tổng và lòng nồi, còn lời xác nhận cần được đối chiếu đúng hồ sơ/đơn trước khi chuyển tiền; phương án tự làm có điều kiện có thể là hướng cải tiến khi việc xác minh đủ tin cậy, nhưng prototype hiện không tự hoàn tiền.
 
 **Thử chính sách trên 3 ca:**
 
