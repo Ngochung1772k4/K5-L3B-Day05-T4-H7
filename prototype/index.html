@@ -3,272 +3,142 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Case Assist — Khiếu nại không đúng mô tả</title>
-  <style>
-    :root {
-      --ink: #17211d;
-      --muted: #718078;
-      --line: #e7ece8;
-      --paper: #fff;
-      --canvas: #f4f7f5;
-      --green: #087c58;
-      --green-soft: #e8f5ef;
-      --orange: #e96e36;
-      --orange-soft: #fff1e9;
-      --amber: #a65b06;
-      --amber-soft: #fff6df;
-      --blue: #315fad;
-      --blue-soft: #edf3ff;
-      --shadow: 0 12px 34px rgba(24, 47, 36, .06);
-    }
-    * { box-sizing: border-box; }
-    body { margin: 0; color: var(--ink); background: var(--canvas); font: 14px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
-    button { font: inherit; cursor: pointer; }
-    .topbar { height: 64px; display: flex; align-items: center; gap: 24px; padding: 0 32px; background: #fff; border-bottom: 1px solid var(--line); }
-    .brand { display: flex; align-items: center; gap: 10px; min-width: 220px; font-weight: 760; letter-spacing: -.02em; }
-    .brand-mark { display:grid; place-items:center; width:32px; height:32px; border-radius:10px; background:var(--orange); color:white; font-size:12px; font-weight:850; }
-    .brand span { color: var(--muted); font-weight: 500; }
-    .search { width: min(440px, 38vw); background: #f4f6f5; color: #8b9791; border: 1px solid #edf0ee; border-radius: 10px; padding: 9px 13px; }
-    .topright { margin-left:auto; display:flex; align-items:center; gap:18px; color:#627068; }
-    .avatar { width:32px; height:32px; border-radius:50%; display:grid; place-items:center; background:#e9eee9; color:#506058; font-weight:700; }
-    .layout { display:grid; grid-template-columns: 220px minmax(0, 1fr); min-height:calc(100vh - 64px); }
-    .sidebar { padding:24px 14px; background:#fff; border-right:1px solid var(--line); }
-    .side-label { padding:10px 12px 8px; color:#99a39d; font-size:10px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
-    .nav { padding:11px 12px; margin:3px 0; color:#6c7871; border-radius:9px; display:flex; align-items:center; gap:11px; font-weight:550; }
-    .nav.active { color:#8d3c1d; background:var(--orange-soft); font-weight:700; }
-    .nav .ico { width:18px; text-align:center; font-size:16px; }
-    .side-foot { margin:34px 8px 0; padding:14px; border:1px solid var(--line); border-radius:12px; color:#7d8882; font-size:11px; line-height:1.55; }
-    .side-foot strong { color:#536159; display:block; margin-bottom:4px; }
-    main { width:100%; max-width:1500px; margin:0 auto; padding:27px 30px 36px; }
-    .crumb { color:#87928c; font-size:12px; margin-bottom:16px; }
-    .crumb b { color:#59665f; font-weight:650; }
-    .heading { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; margin-bottom:20px; }
-    h1 { margin:0; font-size:25px; line-height:1.2; letter-spacing:-.04em; }
-    .subhead { margin-top:7px; color:var(--muted); font-size:13px; }
-    .tag { display:inline-flex; align-items:center; gap:7px; padding:7px 10px; color:var(--amber); background:var(--amber-soft); border:1px solid #f2dda8; border-radius:999px; font-size:11px; font-weight:750; white-space:nowrap; }
-    .tag .dot { width:6px; height:6px; border-radius:50%; background:#d78c1b; }
-    .casebar { display:flex; gap:22px; align-items:center; padding:14px 18px; margin-bottom:16px; background:#fff; border:1px solid var(--line); border-radius:13px; box-shadow:var(--shadow); }
-    .casepart { min-width:0; }
-    .casepart + .casepart { border-left:1px solid var(--line); padding-left:22px; }
-    .cap { color:#96a19a; font-size:10px; text-transform:uppercase; font-weight:800; letter-spacing:.1em; }
-    .value { margin-top:3px; font-weight:700; font-size:13px; }
-    .value small { color:var(--muted); font-weight:500; }
-    .spacer { flex:1; }
-    .cols { display:grid; grid-template-columns:minmax(0, 1fr) 330px; gap:16px; align-items:start; }
-    .stack { display:grid; gap:15px; }
-    .card { background:var(--paper); border:1px solid var(--line); border-radius:13px; box-shadow:var(--shadow); overflow:hidden; }
-    .cardhead { display:flex; align-items:center; justify-content:space-between; padding:15px 18px; border-bottom:1px solid #edf0ee; }
-    .cardtitle { font-size:13px; font-weight:760; letter-spacing:-.01em; }
-    .cardhint { color:#929d96; font-size:11px; }
-    .conversation { padding:17px 18px 15px; }
-    .msg { max-width:84%; margin:0 0 12px; padding:11px 13px; border-radius:12px; }
-    .msg.user { margin-left:auto; background:#f1f4f2; border:1px solid #e8ece9; }
-    .msg.ai { background:#f1f8f4; border:1px solid #dceee3; }
-    .msg.seller { margin:0 0 12px; background:#fffaf0; border:1px solid #f2e8d2; }
-    .msg small { display:block; margin-bottom:5px; color:#859189; font-size:10px; font-weight:750; }
-    .msg p { margin:0; font-size:12px; line-height:1.55; }
-    .msg .time { margin-top:6px; text-align:right; font-size:10px; color:#a0aaa4; }
-    .compare { display:grid; grid-template-columns:1fr 1fr; gap:11px; padding:15px 18px 17px; }
-    .evidence { padding:13px; border:1px solid var(--line); border-radius:10px; background:#fff; }
-    .evidence-top { display:flex; align-items:center; justify-content:space-between; gap:10px; }
-    .evidence-label { color:#8a958e; text-transform:uppercase; font-size:9px; font-weight:850; letter-spacing:.11em; }
-    .mini-tag { color:#617069; background:#f3f5f4; padding:4px 7px; border-radius:6px; font-size:9px; font-weight:700; white-space:nowrap; }
-    .evidence h3 { margin:10px 0 5px; font-size:13px; letter-spacing:-.02em; }
-    .evidence p { margin:0; color:#69766e; font-size:11px; line-height:1.55; }
-    .evidence p b { color:#293730; }
-    .divider { height:1px; background:#edf0ee; margin:11px 0; }
-    .timeline { padding:5px 18px 16px; }
-    .event { position:relative; display:grid; grid-template-columns:18px 1fr; gap:10px; padding:9px 0; }
-    .event:not(:last-child):before { content:""; position:absolute; left:7px; top:24px; bottom:-6px; width:1px; background:#e1e8e3; }
-    .event-icon { z-index:1; width:15px; height:15px; border-radius:50%; display:grid; place-items:center; color:#167554; background:#e7f4ed; font-size:9px; }
-    .event-icon.muted { color:#88938d; background:#eff2f0; }
-    .event-copy { font-size:11px; color:#59675f; }
-    .event-copy b { color:#25332b; }
-    .event-copy time { display:block; margin-top:2px; color:#a0aaa4; font-size:10px; }
-    .right-card { padding:17px; }
-    .statusbox { margin:12px 0 14px; padding:12px; background:var(--amber-soft); border:1px solid #f0dfb2; border-radius:10px; }
-    .status-title { color:#80500f; font-weight:800; font-size:12px; }
-    .statusbox p { margin:5px 0 0; color:#8b6b3a; font-size:11px; }
-    .confidence { display:flex; justify-content:space-between; align-items:center; margin:13px 0 6px; color:#66736b; font-size:11px; }
-    .meter { height:6px; overflow:hidden; border-radius:99px; background:#edf0ee; }
-    .meter span { display:block; width:54%; height:100%; background:#d5a14a; border-radius:99px; }
-    .basis { margin:12px 0 15px; display:grid; gap:8px; }
-    .basis-row { display:flex; gap:8px; color:#647168; font-size:11px; }
-    .check { color:#15825e; font-weight:900; }
-    .question { color:#bc791a; font-weight:900; }
-    .divider-label { display:flex; align-items:center; gap:9px; margin:14px 0 10px; color:#9ba49e; font-size:9px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
-    .divider-label:after { content:""; flex:1; height:1px; background:#edf0ee; }
-    .btn { width:100%; padding:10px 12px; margin:0 0 8px; border:1px solid #dfe6e1; border-radius:9px; background:#fff; color:#344239; font-size:11px; font-weight:750; text-align:left; transition:.15s; }
-    .btn:hover { border-color:#a9cbbb; background:#f7fbf8; transform:translateY(-1px); }
-    .btn.primary { color:white; border-color:var(--green); background:var(--green); text-align:center; }
-    .btn.primary:hover { background:#056849; }
-    .btn.soft { text-align:center; color:#506057; }
-    .btn:disabled { opacity:.55; cursor:default; transform:none; }
-    .note { margin-top:8px; color:#98a29c; font-size:10px; line-height:1.5; }
-    .policy-lock { display:flex; align-items:center; gap:9px; padding:11px 12px; margin-top:12px; border:1px dashed #d8dfda; border-radius:9px; color:#7b8780; font-size:10px; }
-    .autonomy-list { display:grid; gap:7px; margin:10px 0 13px; }
-    .autonomy-row { display:flex; align-items:flex-start; gap:8px; color:#657168; font-size:10px; line-height:1.4; }
-    .level { flex:0 0 auto; padding:3px 6px; border-radius:5px; font-weight:800; font-size:8px; letter-spacing:.02em; text-transform:uppercase; }
-    .level.auto { color:#17694f; background:#e9f5ee; }
-    .level.review { color:#815210; background:#fff4dc; }
-    .level.banned { color:#9a4534; background:#fff0ed; }
-    .lock { font-size:14px; }
-    .policy-lock b { display:block; color:#657168; font-size:10px; }
-    .toast { position:fixed; right:24px; bottom:24px; max-width:390px; padding:13px 16px; border-radius:11px; background:#1d3429; color:#fff; box-shadow:0 12px 35px #10241940; opacity:0; transform:translateY(12px); pointer-events:none; transition:.24s; font-size:12px; z-index:5; }
-    .toast.show { opacity:1; transform:translateY(0); }
-    .pending-badge { display:none; padding:5px 8px; color:#135b43; background:#e8f5ef; border-radius:7px; font-size:9px; font-weight:800; }
-    .pending-badge.show { display:inline-flex; }
-    @media (max-width:1080px) { .layout{grid-template-columns:68px minmax(0,1fr)} .sidebar{padding:20px 8px}.brand{min-width:auto}.brand-label,.side-label,.nav span:not(.ico),.side-foot{display:none}.nav{justify-content:center;padding:12px 4px}.cols{grid-template-columns:minmax(0,1fr) 300px} main{padding:22px 18px} }
-    @media (max-width:760px) { .topbar{padding:0 15px}.search{display:none}.layout{display:block}.sidebar{display:none}main{padding:18px 12px}.heading{display:block}.heading>.tag{margin-top:12px}.casebar{flex-wrap:wrap;gap:12px}.casepart + .casepart{padding-left:12px}.cols{grid-template-columns:1fr}.compare{grid-template-columns:1fr}.msg{max-width:96%}.topright{gap:9px} }
-    @media print { body{background:#fff}.topbar,.sidebar{display:none}.layout{display:block}main{max-width:none;padding:16px}.card,.casebar{box-shadow:none} }
-  </style>
+  <meta name="theme-color" content="#12342f">
+  <title>Case Assist — Bàn thử xử lý khiếu nại</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#main">Đi tới nội dung chính</a>
   <header class="topbar">
-    <div class="brand"><div class="brand-mark">CA</div><div class="brand-label">Case Assist <span>· marketplace</span></div></div>
-    <div class="search">⌕ &nbsp; Tìm đơn hàng, người mua hoặc mã khiếu nại</div>
-    <div class="topright"><span>Trung tâm xử lý</span><span aria-label="Thông báo">♧</span><div class="avatar">T4</div></div>
+    <div class="topbar-inner">
+      <div class="brand" aria-label="Case Assist">
+        <span class="brand-mark" aria-hidden="true">CA</span>
+        <span><strong>Case Assist</strong><small>LAB 5 · TRACK THƯƠNG MẠI ĐIỆN TỬ</small></span>
+      </div>
+      <span class="demo-tag"><span class="demo-dot" aria-hidden="true"></span>Mô phỏng · dữ liệu giả</span>
+    </div>
   </header>
-  <div class="layout">
-    <aside class="sidebar">
-      <div class="side-label">Không gian làm việc</div>
-      <div class="nav"><span class="ico">▦</span><span>Tổng quan</span></div>
-      <div class="nav active"><span class="ico">◉</span><span>Khiếu nại</span></div>
-      <div class="nav"><span class="ico">▤</span><span>Đơn hàng</span></div>
-      <div class="nav"><span class="ico">◷</span><span>Chờ phản hồi</span></div>
-      <div class="side-label" style="margin-top:18px">Quản lý</div>
-      <div class="nav"><span class="ico">♙</span><span>Chuyển nhân viên</span></div>
-      <div class="nav"><span class="ico">⚙</span><span>Quy tắc xử lý</span></div>
-      <div class="side-foot"><strong>Prototype lớp học</strong>Dữ liệu giả lập · Không kết nối Shopee<br>Trạng thái hiển thị chỉ phục vụ demo.</div>
-    </aside>
-    <main>
-      <div class="crumb">Khiếu nại <span>›</span> Hồ sơ <b>ECOM-4821</b></div>
-      <div class="heading">
-        <div><h1>Hàng không đúng mô tả</h1><div class="subhead">AI đang tổng hợp căn cứ cho người xử lý · Không tự quyết định hoàn tiền</div></div>
-        <div class="tag"><span class="dot"></span><span id="statusTag">Đang đối chiếu · Chưa kết luận</span></div>
+
+  <main id="main" class="page">
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Bàn thử trải nghiệm khi AI chưa chắc</p>
+        <h1 id="page-title">Một khiếu nại.<br><em>Hai phía cần được lắng nghe.</em></h1>
+        <p class="hero-copy">Thử lời nhắn của người mua để xem trợ lý đối chiếu căn cứ, trả lời từng bên và dừng lại ở đâu trước một quyết định có thể gây thiệt hại.</p>
       </div>
-      <section class="casebar">
-        <div class="casepart"><div class="cap">Mã khiếu nại</div><div class="value">ECOM-4821 <small>· dữ liệu dựng</small></div></div>
-        <div class="casepart"><div class="cap">Đơn hàng</div><div class="value">SPX-740218</div></div>
-        <div class="casepart"><div class="cap">Mặt hàng</div><div class="value">Nồi chiên không dầu · 6L</div></div>
-        <div class="casepart"><div class="cap">Mở lúc</div><div class="value">13/11/2026 <small>09:42</small></div></div>
-        <div class="spacer"></div>
-        <span class="pending-badge" id="pendingBadge">Đã gửi yêu cầu bổ sung</span>
-      </section>
-      <div class="cols">
-        <div class="stack">
-          <section class="card">
-            <div class="cardhead"><div class="cardtitle">Trao đổi trong hồ sơ</div><div class="cardhint">Ẩn thông tin liên hệ cá nhân</div></div>
-            <div class="conversation">
-              <div class="msg user"><small>NGƯỜI MUA · 09:42</small><p>Nồi ghi 6 lít mà lòng nồi đo chỉ được 5 lít. Mình muốn trả hàng hoàn tiền.</p><div class="time">Đơn đã nhận · 12/11/2026</div></div>
-              <div class="msg seller"><small>NGƯỜI BÁN · PHẢN HỒI TRONG HỒ SƠ</small><p>6L là dung tích tổng. Shop vừa cập nhật mô tả để ghi rõ lòng nồi khoảng 5L.</p></div>
-              <div class="msg ai"><small>TRỢ LÝ · BẢN XEM TRƯỚC NGƯỜI MUA · G10</small><p>Mình thấy mô tả được cập nhật sau khi bạn đặt. Bản lúc đặt chỉ ghi “dung tích 6L”; shop nói 6L là dung tích tổng. Mình chưa thể kết luận hàng sai. Bạn có thể gửi ảnh lòng nồi/nhãn hoặc chuyển hồ sơ cho nhân viên kiểm tra.</p></div>
-              <div class="msg" id="eventMessage" style="display:none;background:#edf3ff;border:1px solid #dce6fa"><small>HỆ THỐNG · VỪA CẬP NHẬT</small><p id="eventMessageText"></p></div>
-            </div>
-          </section>
-          <section class="card">
-            <div class="cardhead"><div><div class="cardtitle">Căn cứ đang xem</div><div class="cardhint" style="margin-top:3px">Đối chiếu theo thời điểm mua · chưa đủ để phân xử tự động</div></div><span class="mini-tag">G11 · Giải thích</span></div>
-            <div class="compare">
-              <article class="evidence">
-                <div class="evidence-top"><span class="evidence-label">Bản lưu lúc đặt</span><span class="mini-tag">12/11 · 18:16</span></div>
-                <h3>Nồi chiên không dầu 6L</h3>
-                <p>Mô tả sản phẩm: <b>“Dung tích 6L”</b><br>Chưa nêu rõ dung tích tổng hay dung tích lòng nồi.</p>
-                <div class="divider"></div><p style="font-size:10px">Nguồn: snapshot đơn SPX-740218</p>
-              </article>
-              <article class="evidence">
-                <div class="evidence-top"><span class="evidence-label">Mô tả hiện tại</span><span class="mini-tag">Sửa sau khi mua · 13/11 08:50</span></div>
-                <h3>6L tổng · lòng nồi 5L</h3>
-                <p>Trang sản phẩm được chỉnh sau khi mua, bổ sung phân biệt <b>dung tích tổng 6L</b> và dung tích lòng nồi.</p>
-                <div class="divider"></div><p style="font-size:10px">Nguồn: phiên bản hiện tại trong fixture giả</p>
-              </article>
-            </div>
-          </section>
-          <section class="card">
-            <div class="cardhead"><div class="cardtitle">Dòng thời gian xử lý</div><div class="cardhint">Hai bên cùng được lắng nghe</div></div>
-            <div class="timeline" id="timeline">
-              <div class="event"><span class="event-icon">✓</span><div class="event-copy"><b>Đã nhận khiếu nại</b> từ người mua<time>13/11/2026 · 09:42</time></div></div>
-              <div class="event"><span class="event-icon muted">•</span><div class="event-copy"><b>Đã tải snapshot mô tả lúc đặt</b><time>Không dùng mô tả hiện tại thay cho lịch sử đơn</time></div></div>
-              <div class="event"><span class="event-icon muted">?</span><div class="event-copy"><b>Còn thiếu</b> ảnh nhãn hoặc xác nhận loại dung tích<time>Chưa có quyết định hoàn tiền/từ chối</time></div></div>
-            </div>
-          </section>
+      <div class="hero-rule" aria-label="Nguyên tắc xử lý">
+        <span class="hero-rule-icon" aria-hidden="true">↔</span>
+        <div><strong>Vai trò của AI: hỗ trợ đối chiếu</strong><span>Không tự hoàn tiền, từ chối khiếu nại hay phạt shop.</span></div>
+      </div>
+    </section>
+
+    <div class="workspace">
+      <section class="panel simulator" aria-labelledby="sim-title">
+        <div class="panel-heading">
+          <div><span class="step">01 · THỬ TÌNH HUỐNG</span><h2 id="sim-title">Khách hàng vừa nhắn gì?</h2></div>
+          <span class="subtle-tag">7 ca mẫu</span>
         </div>
-        <aside class="stack">
-          <section class="card right-card">
-            <div class="cardtitle">Đề xuất của trợ lý</div>
-            <div class="statusbox"><div class="status-title">Chưa đủ căn cứ để kết luận</div><p>Yêu cầu tiền hoặc xử phạt phải được nhân viên có thẩm quyền duyệt.</p></div>
-            <div class="confidence"><span>Căn cứ hiện có</span><b>2 nguồn · cần xác minh</b></div>
-            <div class="meter" aria-label="Căn cứ cần xác minh"><span></span></div>
-            <div class="basis">
-              <div class="basis-row"><span class="check">✓</span><span>Đã có snapshot mô tả tại thời điểm đặt</span></div>
-              <div class="basis-row"><span class="check">✓</span><span>Đã ghi nhận lời trình bày của người mua</span></div>
-              <div class="basis-row"><span class="question">!</span><span>Chưa có ảnh nhãn để kiểm chứng lời shop</span></div>
-            </div>
-            <div class="divider-label">Mức tự chủ</div>
-            <div class="autonomy-list">
-              <div class="autonomy-row"><span class="level auto">Tự làm</span><span>Tự chuyển trưởng nhóm khi mâu thuẫn chứng cứ, nghi hàng giả hoặc quá hạn.</span></div>
-              <div class="autonomy-row"><span class="level review">Cần duyệt</span><span>Hoàn tiền / từ chối: nhân viên xem đủ căn cứ hai bên.</span></div>
-              <div class="autonomy-row"><span class="level banned">Cấm</span><span>Phạt hoặc khóa shop trong luồng khiếu nại thường.</span></div>
-            </div>
-            <div class="divider-label">Bước tiếp theo</div>
-            <button class="btn primary" id="requestBtn">Duyệt & yêu cầu ảnh nhãn từ shop</button>
-            <button class="btn soft" id="escalateBtn">G8 · Chuyển nhân viên xem xét</button>
-            <p class="note">Dự kiến phản hồi 24 giờ là mốc giả lập của prototype. Người mua có thể chuyển nhân viên ngay, không phải chờ.</p>
-            <div class="policy-lock"><span class="lock">▣</span><div><b>Hoàn tiền / từ chối / phạt shop</b>Chỉ người có thẩm quyền mới quyết định</div></div>
-          </section>
-          <section class="card right-card">
-            <div class="cardtitle">Quy tắc công bằng</div>
-            <div class="basis" style="margin-bottom:0">
-              <div class="basis-row"><span class="check">✓</span><span>So với mô tả lúc đặt, không phải nội dung hiện tại</span></div>
-              <div class="basis-row"><span class="check">✓</span><span>Đe dọa hoặc lịch sử một phía không phải bằng chứng duy nhất</span></div>
-              <div class="basis-row"><span class="check">✓</span><span>Không chia sẻ số điện thoại/địa chỉ giữa hai bên</span></div>
-            </div>
-          </section>
-        </aside>
+        <p class="section-help">Chọn một ca có dữ liệu dựng, hoặc sửa lời nhắn để thử tình huống khác. Văn bản tự nhập chưa có hồ sơ hay bằng chứng đã xác minh.</p>
+        <div id="sampleList" class="sample-list" role="group" aria-label="Chọn câu mẫu"></div>
+        <form id="scenarioForm" novalidate>
+          <div class="field-heading"><label for="buyerInput">Lời người mua</label><span>Được dùng để nhận diện tình huống</span></div>
+          <textarea id="buyerInput" name="buyer" rows="4" maxlength="1000" required aria-describedby="inputHelp"></textarea>
+          <div class="field-heading seller-heading"><label for="sellerInput">Phản hồi của shop <span class="optional">(nếu có)</span></label><span>Chỉ là lời trình bày, chưa phải kết luận</span></div>
+          <textarea id="sellerInput" name="seller" rows="3" maxlength="1000" aria-describedby="inputHelp"></textarea>
+          <p id="inputHelp" class="input-help">Dùng dữ liệu giả để thử. Hai bên chỉ thấy thông tin cần thiết trong hồ sơ, không thấy liên hệ cá nhân của nhau.</p>
+          <p id="formError" class="form-error" role="alert" hidden></p>
+          <div class="form-actions">
+            <button class="button button-primary" type="submit">Xem AI sẽ xử lý <span aria-hidden="true">→</span></button>
+            <span id="sourceLabel" class="source-label">Ca mẫu ECOM-4821</span>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel decision" aria-labelledby="decision-title">
+        <div class="panel-heading">
+          <div><span class="step">02 · AI ĐỐI CHIẾU</span><h2 id="decision-title">Đề xuất xử lý</h2></div>
+          <span class="neutral-tag">Trung lập</span>
+        </div>
+        <div class="case-meta"><span id="caseCode">ECOM-4821 · SPX-740218</span><span id="caseType">Dung tích chưa rõ</span></div>
+        <div class="decision-state" role="status" aria-live="polite">
+          <span class="state-icon" aria-hidden="true">!</span>
+          <div><strong id="statusTitle">Chưa đủ căn cứ để kết luận</strong><p id="statusDetail">Cần kiểm tra loại dung tích và bằng chứng từ hai bên.</p></div>
+        </div>
+        <div id="versionCompare" class="version-compare" aria-label="So sánh mô tả sản phẩm" hidden>
+          <div class="version-card"><small>BẢN LƯU LÚC ĐẶT</small><strong id="snapshotText"></strong><span id="snapshotTime"></span></div>
+          <div class="version-card version-current"><small>TRANG HIỆN TẠI</small><strong id="currentText"></strong><span id="currentTime"></span></div>
+        </div>
+        <div class="evidence-grid">
+          <div class="evidence-box">
+            <h3><span aria-hidden="true">✓</span> Đã biết</h3>
+            <ul id="knownList"></ul>
+          </div>
+          <div class="evidence-box missing">
+            <h3><span aria-hidden="true">?</span> Cần xác minh</h3>
+            <ul id="missingList"></ul>
+          </div>
+        </div>
+        <div class="decision-reason"><strong>Vì sao AI chọn bước này?</strong><p id="reasonText"></p></div>
+        <div class="decision-actions">
+          <button id="draftBtn" type="button" class="button button-outline"></button>
+          <button id="escalateBtn" type="button" class="button button-secondary"></button>
+        </div>
+        <p class="action-footnote" id="actionFootnote"></p>
+      </section>
+    </div>
+
+    <section class="panel message-panel" aria-labelledby="message-title">
+      <div class="panel-heading">
+        <div><span class="step">03 · HAI MÀN HÌNH</span><h2 id="message-title">Mỗi bên sẽ thấy gì?</h2></div>
+        <span class="subtle-tag">Bản xem trước · chưa gửi</span>
       </div>
-    </main>
-  </div>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script>
-    const toast = document.getElementById('toast');
-    let toastTimer;
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
-    }
-    function appendEvent(icon, title, detail) {
-      const timeline = document.getElementById('timeline');
-      const row = document.createElement('div');
-      row.className = 'event';
-      row.innerHTML = '<span class="event-icon">' + icon + '</span><div class="event-copy"><b>' + title + '</b><time>' + detail + '</time></div>';
-      timeline.appendChild(row);
-    }
-    document.getElementById('requestBtn').addEventListener('click', () => {
-      const button = document.getElementById('requestBtn');
-      button.disabled = true;
-      button.textContent = 'Đã gửi yêu cầu qua hồ sơ';
-      document.getElementById('pendingBadge').classList.add('show');
-      document.getElementById('eventMessage').style.display = 'block';
-      document.getElementById('eventMessageText').textContent = 'Đã yêu cầu shop gửi ảnh nhãn để xác minh loại dung tích. Không gửi thông tin liên hệ cá nhân.';
-      appendEvent('↗', 'Đã gửi yêu cầu xác minh cho shop', 'Người mua có thể chuyển nhân viên bất cứ lúc nào');
-      showToast('Yêu cầu đã được ghi nhận. Hồ sơ vẫn chưa có quyết định.');
-    });
-    document.getElementById('escalateBtn').addEventListener('click', () => {
-      const button = document.getElementById('escalateBtn');
-      button.disabled = true;
-      button.textContent = 'Đã chuyển nhân viên ✓';
-      document.getElementById('statusTag').textContent = 'Đã chuyển nhân viên · Chờ xem xét';
-      document.getElementById('eventMessage').style.display = 'block';
-      document.getElementById('eventMessageText').textContent = 'Hồ sơ được chuyển kèm snapshot mô tả, phần chưa rõ và phản hồi của hai bên.';
-      appendEvent('↗', 'Đã chuyển hồ sơ cho nhân viên', 'Lý do: loại dung tích chưa được xác minh');
-      showToast('Nhân viên nhận được hồ sơ và căn cứ hai phía. Chưa bên nào bị xử thua.');
-    });
-    if (new URLSearchParams(location.search).get('state') === 'escalated') {
-      document.getElementById('escalateBtn').click();
-      toast.classList.remove('show');
-      clearTimeout(toastTimer);
-    }
-  </script>
+      <p class="section-help">Thông điệp được viết riêng cho từng bên. Không chuyển lời cáo buộc thành sự thật đã xác minh và không lộ dữ liệu riêng.</p>
+      <div class="preview-grid">
+        <article class="preview-card buyer-preview" aria-labelledby="buyer-preview-title">
+          <div class="preview-head"><span class="person-icon" aria-hidden="true">M</span><div><small>MÀN HÌNH NGƯỜI MUA</small><h3 id="buyer-preview-title">Cập nhật khiếu nại</h3></div></div>
+          <p id="buyerReply" class="preview-copy"></p>
+          <div class="preview-footer"><span id="buyerStatus"></span><span>Không tự quyết định hoàn tiền</span></div>
+        </article>
+        <article class="preview-card seller-preview" aria-labelledby="seller-preview-title">
+          <div class="preview-head"><span class="person-icon" aria-hidden="true">B</span><div><small>MÀN HÌNH NGƯỜI BÁN</small><h3 id="seller-preview-title">Yêu cầu trong hồ sơ</h3></div></div>
+          <p id="sellerReply" class="preview-copy"></p>
+          <div class="preview-footer"><span id="sellerStatus"></span><span>Có quyền bổ sung căn cứ</span></div>
+        </article>
+      </div>
+    </section>
+
+    <div class="bottom-grid">
+      <section class="panel policy-panel" aria-labelledby="policy-title">
+        <div class="panel-heading"><div><span class="step">04 · RANH GIỚI QUYỀN HẠN</span><h2 id="policy-title">AI được làm đến đâu?</h2></div></div>
+        <div class="policy-row"><span class="policy-level automatic">Tự làm</span><p id="autoPolicy"></p></div>
+        <div class="policy-row"><span class="policy-level approval">Cần duyệt</span><p id="reviewPolicy"></p></div>
+        <div class="policy-row"><span class="policy-level forbidden">Cấm</span><p id="banPolicy"></p></div>
+        <p class="policy-note">Quy tắc chung: yêu cầu chứng cứ mới phải được nhân viên xem trước khi gửi; hoàn tiền và từ chối cần người có thẩm quyền quyết định. AI không phạt hoặc khóa shop trong luồng khiếu nại này.</p>
+      </section>
+
+      <section class="panel feedback-panel" aria-labelledby="feedback-title">
+        <div class="panel-heading"><div><span class="step">05 · BẠN ĐÁNH GIÁ</span><h2 id="feedback-title">Phản hồi này có công bằng?</h2></div></div>
+        <p class="section-help">Chọn một đánh giá và ghi rõ điểm bạn muốn AI xem lại. Phản hồi chỉ được lưu trong phiên xem thử này.</p>
+        <div class="feedback-options" role="group" aria-label="Đánh giá phản hồi AI">
+          <button type="button" data-feedback="Hợp lý" class="feedback-option">✓ Hợp lý</button>
+          <button type="button" data-feedback="Thiếu căn cứ" class="feedback-option">? Thiếu căn cứ</button>
+          <button type="button" data-feedback="Có vẻ thiên vị" class="feedback-option">↔ Có vẻ thiên vị</button>
+        </div>
+        <label class="feedback-label" for="feedbackNote">Bình luận của bạn <span class="optional">(tuỳ chọn)</span></label>
+        <textarea id="feedbackNote" rows="3" maxlength="600" placeholder="Ví dụ: AI đã bỏ qua bản mô tả lúc đặt..." aria-describedby="feedbackHelp"></textarea>
+        <div class="feedback-submit"><button id="saveFeedback" type="button" class="button button-outline">Ghi nhận đánh giá</button><span id="feedbackHelp">Không thay đổi quyết định tiền hoặc trạng thái khiếu nại.</span></div>
+        <p id="feedbackResult" class="feedback-result" role="status" aria-live="polite" hidden></p>
+      </section>
+    </div>
+
+    <section class="panel timeline-panel" aria-labelledby="timeline-title">
+      <div class="panel-heading"><div><span class="step">NHẬT KÝ MÔ PHỎNG</span><h2 id="timeline-title">Đã diễn ra gì trong phiên này?</h2></div><button id="resetBtn" type="button" class="text-button">Đặt lại ca mẫu</button></div>
+      <ol id="timeline" class="timeline"></ol>
+    </section>
+
+    <footer class="page-footer">Prototype lớp học · Dữ liệu giả · Không có AI hoặc kết nối Shopee thật · Mốc phản hồi 24 giờ trong bài là giả định cần được vận hành xác nhận.</footer>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
